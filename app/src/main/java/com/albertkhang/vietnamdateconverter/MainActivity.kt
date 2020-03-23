@@ -31,9 +31,32 @@ class MainActivity : AppCompatActivity() {
 //            testGetSolarDate()
 //            testGetCanChiDate()
 //            testGetWeekdays()
-            testGetCanChiHour()
+//            testGetCanChiHour()
+            testGetSolarTerm()
         }
         btnConvert.callOnClick()
+    }
+
+    private fun testGetSolarTerm() {
+        val GET_SOLARTERM_LOG = "testGetSolarTermLog"
+
+        val solarDate = SolarDate()
+        Log.d(GET_SOLARTERM_LOG, solarDate.toString())
+
+        val lunarDate = vietnamDateConverter.getLunarDate(solarDate)
+        Log.d(GET_SOLARTERM_LOG, lunarDate.toString())
+
+        val st1 = vietnamDateConverter.getSolarTerm()
+        Log.d(GET_SOLARTERM_LOG, "st1: $st1")
+
+        val st2 = vietnamDateConverter.getSolarTerm(solarDate)
+        Log.d(GET_SOLARTERM_LOG, "st2: $st2")
+
+        val st3 = vietnamDateConverter.getSolarTerm(lunarDate)
+        Log.d(GET_SOLARTERM_LOG, "st3: $st3")
+
+        val st4 = vietnamDateConverter.getSolarTerm(23, 3, 2020)
+        Log.d(GET_SOLARTERM_LOG, "st4: $st4")
     }
 
     private fun testGetCanChiHour() {

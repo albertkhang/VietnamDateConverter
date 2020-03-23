@@ -632,6 +632,7 @@ class VietnamDateConverter {
 
     //========== Giờ can chi ==========//
 
+    //Trả về giờ theo Can Chi ở thời điểm hiện tại.
     fun getCanChiHour(): String {
         val lunarDate = getLunarDate()
 
@@ -647,6 +648,7 @@ class VietnamDateConverter {
         )]} ${CHI[chiHourIndex]}"
     }
 
+    //Trả về giờ theo Can Chi với giờ, phút là tham số truyền vào.
     fun getCanChiHour(hour: Int, minute: Int): String {
         val lunarDate = getLunarDate()
 
@@ -659,6 +661,7 @@ class VietnamDateConverter {
         )]} ${CHI[chiHourIndex]}"
     }
 
+    //Trả về giờ theo Can Chi với giờ, phút, ngày dương là tham số truyền vào.
     fun getCanChiHour(hour: Int, minute: Int, solarDate: SolarDate): String {
         val lunarDate = getLunarDate(solarDate)
 
@@ -671,6 +674,7 @@ class VietnamDateConverter {
         )]} ${CHI[chiHourIndex]}"
     }
 
+    //Trả về giờ theo Can Chi với giờ, phút, ngày âm là tham số truyền vào.
     fun getCanChiHour(hour: Int, minute: Int, lunarDate: LunarDate): String {
         val canDateIndex = (lunarDate.jd + 9) % 10
         val chiHourIndex = getChiHourIndex(hour, minute)
@@ -681,6 +685,7 @@ class VietnamDateConverter {
         )]} ${CHI[chiHourIndex]}"
     }
 
+    //Trả về giờ theo Can Chi với giờ, phút, ngày, tháng, năm dương là tham số truyền vào.
     fun getCanChiHour(
         hour: Int,
         minute: Int,
@@ -767,9 +772,32 @@ class VietnamDateConverter {
         return index
     }
 
-    //========== Tiết khí
-    private fun getTietKhi(jd: Int): String {
-        return TIETKHI[getSunLongitude(jd + 1)]
+    //========== Tiết khí ==========//
+
+    //TODO: Optimize using jd in SolarDate
+    //Trả về tiết khí của ngày hiện tại.
+    fun getSolarTerm(): String {
+        val lunarDate = getLunarDate()
+
+        return TIETKHI[getSunLongitude(lunarDate.jd + 1)]
+    }
+
+    //Trả về tiết khí của ngày dương là tham số truyền vào.
+    fun getSolarTerm(solarDate: SolarDate): String {
+        val lunarDate = getLunarDate(solarDate)
+
+        return TIETKHI[getSunLongitude(lunarDate.jd + 1)]
+    }
+
+    //Trả về tiết khí của ngày âm là tham số truyền vào.
+    fun getSolarTerm(lunarDate: LunarDate): String {
+        return TIETKHI[getSunLongitude(lunarDate.jd + 1)]
+    }
+
+    //Trả về tiết khí của ngày, tháng, năm dương là tham số truyền vào.
+    fun getSolarTerm(solarDay: Int, solarMonth: Int, solarYear: Int): String {
+        val lunarDate = getLunarDate(solarDay, solarMonth, solarYear)
+        return TIETKHI[getSunLongitude(lunarDate.jd + 1)]
     }
 
     //========== Giờ hoàng đạo
