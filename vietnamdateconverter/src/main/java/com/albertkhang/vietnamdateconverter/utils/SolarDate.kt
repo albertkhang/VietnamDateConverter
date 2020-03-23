@@ -1,5 +1,7 @@
 package com.albertkhang.vietnamdateconverter.utils
 
+import java.util.*
+
 class SolarDate {
     private var _day: Int = 28
     var day: Int
@@ -57,6 +59,12 @@ class SolarDate {
         month = 2
         year = 1999
         jd = 0
+    }
+
+    constructor() {
+        _day = Calendar.getInstance().get(Calendar.DATE)
+        _month = Calendar.getInstance().get(Calendar.MONTH) + 1
+        _year = Calendar.getInstance().get(Calendar.YEAR)
     }
 
     constructor(day: Int, month: Int, year: Int) {

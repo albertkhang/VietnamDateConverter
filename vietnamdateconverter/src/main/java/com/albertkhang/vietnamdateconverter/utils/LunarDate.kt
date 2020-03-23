@@ -71,10 +71,11 @@ class LunarDate {
         _day = day
         _month = month
         _year = year
-
+        _leap = leap
+        _jd = jd
     }
 
     override fun toString(): String {
-        return "LunarDate[day=$day, month=$month, year=$year]"
+        return "LunarDate[day=$_day, month=$_month, year=$_year]"
     }
 }

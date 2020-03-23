@@ -8,7 +8,7 @@ import kotlin.math.floor
 import kotlin.math.sin
 
 class VietnamDateConverter {
-    var TK19 = arrayOf(
+    private val TK19 = arrayOf(
         0x30baa3,
         0x56ab50,
         0x422ba0,
@@ -110,7 +110,7 @@ class VietnamDateConverter {
         0x2abaa3,
         0x50ab50
     ) /* Years 1800-1899 */
-    var TK20 = arrayOf(
+    private val TK20 = arrayOf(
         0x3c4bd8,
         0x624ae0,
         0x4ca570,
@@ -212,7 +212,7 @@ class VietnamDateConverter {
         0x3696d5,
         0x5c92e0
     ) /* Years 1900-1999 */
-    var TK21 = arrayOf(
+    private val TK21 = arrayOf(
         0x46c960,
         0x2ed954,
         0x54d4a0,
@@ -314,7 +314,7 @@ class VietnamDateConverter {
         0x3ed150,
         0x28e952
     ) /* Years 2000-2099 */
-    var TK22 = arrayOf(
+    private val TK22 = arrayOf(
         0x4eb520,
         0x38d727,
         0x5eada0,
@@ -462,7 +462,7 @@ class VietnamDateConverter {
         return floor(n.toDouble())
     }
 
-    private lateinit var _instance: VietnamDateConverter
+    private var _instance: VietnamDateConverter? = null
 
     fun getInstance(): VietnamDateConverter {
         if (_instance == null) {
@@ -473,18 +473,18 @@ class VietnamDateConverter {
             }
         }
 
-        return _instance
+        return _instance!!
     }
 
-    val FIRST_DAY = jdn(25, 1, 1800)// Tết âm lịch 1800
-    val LAST_DAY = jdn(31, 12, 2199)
+    private val FIRST_DAY = jdn(25, 1, 1800)// Tết âm lịch 1800
+    private val LAST_DAY = jdn(31, 12, 2199)
 
     //========== Ngày âm ==========//
 
     //Trả về ngày âm của ngày dương hiện tại.
-    private fun getLunarDate(): LunarDate {
+    fun getLunarDate(): LunarDate {
         val currentDay = Calendar.getInstance().get(Calendar.DATE)
-        val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
+        val currentMonth = Calendar.getInstance().get(Calendar.MONTH) + 1
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
 
         if (currentYear < 1800 || 2199 < currentYear) {
@@ -499,7 +499,7 @@ class VietnamDateConverter {
     }
 
     //Trả về ngày âm với ngày dương là tham số truyền vào.
-    private fun getLunarDate(solarDate: SolarDate): LunarDate {
+    fun getLunarDate(solarDate: SolarDate): LunarDate {
         if (solarDate.year < 1800 || 2199 < solarDate.year) {
             return LunarDate(0, 0, 0)
         }
@@ -512,7 +512,7 @@ class VietnamDateConverter {
     }
 
     //Trả về ngày âm với ngày, tháng, năm dương là tham số truyền vào.
-    private fun getLunarDate(solarDay: Int, solarMonth: Int, solarYear: Int): LunarDate {
+    fun getLunarDate(solarDay: Int, solarMonth: Int, solarYear: Int): LunarDate {
         if (solarYear < 1800 || 2199 < solarYear) {
             return LunarDate(0, 0, 0)
         }
@@ -571,7 +571,7 @@ class VietnamDateConverter {
 //            chiHourIndex
 //        )]} ${CHI[chiHourIndex]}"
 
-    fun getChiHourIndex(hour: Int, minute: Int): Int {
+    private fun getChiHourIndex(hour: Int, minute: Int): Int {
         val time: Float = hour + minute / 60f
 
         if (time >= 23 || time < 1) {   //Tý
@@ -611,7 +611,7 @@ class VietnamDateConverter {
         }
     }
 
-    fun getCanHourIndex(chiDate: Int, chiHourIndex: Int): Int {
+    private fun getCanHourIndex(chiDate: Int, chiHourIndex: Int): Int {
         var baseIndex = 0
 
         when (chiDate) {
