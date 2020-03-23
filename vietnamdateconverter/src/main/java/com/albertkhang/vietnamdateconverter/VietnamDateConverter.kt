@@ -3,6 +3,7 @@ package com.albertkhang.vietnamdateconverter
 import com.albertkhang.vietnamdateconverter.utils.CanChiDate
 import com.albertkhang.vietnamdateconverter.utils.LunarDate
 import com.albertkhang.vietnamdateconverter.utils.SolarDate
+import com.albertkhang.vietnamdateconverter.utils.ZodiacHour
 import java.util.*
 import kotlin.math.floor
 import kotlin.math.sin
@@ -479,7 +480,7 @@ class VietnamDateConverter {
     private val FIRST_DAY = jdn(25, 1, 1800)// Tết âm lịch 1800
     private val LAST_DAY = jdn(31, 12, 2199)
 
-    //========== Ngày âm ==========//
+//========== Ngày âm ==========//
 
     //Trả về ngày âm của ngày dương hiện tại.
     fun getLunarDate(): LunarDate {
@@ -524,7 +525,7 @@ class VietnamDateConverter {
         return findLunarDate(jd, ly)
     }
 
-    //========== Ngày dương ==========//
+//========== Ngày dương ==========//
 
     //Trả về ngày dương với ngày âm là tham số truyền vào.
     fun getSolarDate(lunarDate: LunarDate): SolarDate {
@@ -550,7 +551,7 @@ class VietnamDateConverter {
         return jdToSolarDate(lunarDate.jd + lunarDay - 1)
     }
 
-    //========== Ngày Can Chi ==========//
+//========== Ngày Can Chi ==========//
 
     //Trả về ngày Can Chi của ngày dương hiện tại.
     fun getCanChiDate(): CanChiDate {
@@ -604,7 +605,7 @@ class VietnamDateConverter {
         return getCanChiDate(solarDate)
     }
 
-    //========== Thứ ==========//
+//========== Thứ ==========//
 
     //Trả về thứ của ngày hiện tại.
     fun getWeekdays(): String {
@@ -630,7 +631,7 @@ class VietnamDateConverter {
         return TUAN[(lunarDate.jd + 1) % 7]
     }
 
-    //========== Giờ can chi ==========//
+//========== Giờ can chi ==========//
 
     //Trả về giờ theo Can Chi ở thời điểm hiện tại.
     fun getCanChiHour(): String {
@@ -772,7 +773,7 @@ class VietnamDateConverter {
         return index
     }
 
-    //========== Tiết khí ==========//
+//========== Tiết khí ==========//
 
     //TODO: Optimize using jd in SolarDate
     //Trả về tiết khí của ngày hiện tại.
@@ -800,24 +801,108 @@ class VietnamDateConverter {
         return TIETKHI[getSunLongitude(lunarDate.jd + 1)]
     }
 
-    //========== Giờ hoàng đạo
-    private fun getGioHoangDao(lunarDateJd: Int): String {
-        val chiOfDay = (lunarDateJd + 1) % 12
+//========== Giờ hoàng đạo ==========//
+
+    //TODO: add using 24h in getZodiacHour
+    //Trả về danh sách các giờ hoàng đạo ở ngày hiện tại.
+    fun getZodiacHour(): MutableList<ZodiacHour> {
+        val lunarDate = getLunarDate()
+
+        val chiOfDay = (lunarDate.jd + 1) % 12
         val gioHD =
             GIO_HD[chiOfDay % 6] // same values for Ty' (1) and Ngo. (6), for Suu and Mui etc.
-        var ret = ""
-        val canDateIndex = (lunarDateJd + 9) % 10
-        var count = 0
+
+        val zodiacHours = mutableListOf<ZodiacHour>()
+
+        val canDateIndex = (lunarDate.jd + 9) % 10
+
         for (i in 0..11) {
             if (gioHD[i] == '1') {
-                ret += "${CAN[getCanHourIndex(canDateIndex, i)]} ${CHI[i]}"
-                ret += " (" + (i * 2 + 23) % 24 + " - " + (i * 2 + 1) % 24 + ")"
-                if (count++ < 5) ret += ", "
+                val startHour = (i * 2 + 23) % 24
+                val endHour = (i * 2 + 1) % 24
+                val canChiHour = "${CAN[getCanHourIndex(canDateIndex, i)]} ${CHI[i]}"
+                val zodiacHour = ZodiacHour(startHour, endHour, canChiHour)
+                zodiacHours.add(zodiacHour)
             }
         }
 
-        return ret
+        return zodiacHours
     }
+
+    //Trả về danh sách các giờ hoàng đạo ở ngày dương là tham số truyền vào.
+    fun getZodiacHour(solarDate: SolarDate): MutableList<ZodiacHour> {
+        val lunarDate = getLunarDate(solarDate)
+
+        val chiOfDay = (lunarDate.jd + 1) % 12
+        val gioHD =
+            GIO_HD[chiOfDay % 6] // same values for Ty' (1) and Ngo. (6), for Suu and Mui etc.
+
+        val zodiacHours = mutableListOf<ZodiacHour>()
+
+        val canDateIndex = (lunarDate.jd + 9) % 10
+
+        for (i in 0..11) {
+            if (gioHD[i] == '1') {
+                val startHour = (i * 2 + 23) % 24
+                val endHour = (i * 2 + 1) % 24
+                val canChiHour = "${CAN[getCanHourIndex(canDateIndex, i)]} ${CHI[i]}"
+                val zodiacHour = ZodiacHour(startHour, endHour, canChiHour)
+                zodiacHours.add(zodiacHour)
+            }
+        }
+
+        return zodiacHours
+    }
+
+    //Trả về danh sách các giờ hoàng đạo ở ngày âm là tham số truyền vào.
+    fun getZodiacHour(lunarDate: LunarDate): MutableList<ZodiacHour> {
+        val chiOfDay = (lunarDate.jd + 1) % 12
+        val gioHD =
+            GIO_HD[chiOfDay % 6] // same values for Ty' (1) and Ngo. (6), for Suu and Mui etc.
+
+        val zodiacHours = mutableListOf<ZodiacHour>()
+
+        val canDateIndex = (lunarDate.jd + 9) % 10
+
+        for (i in 0..11) {
+            if (gioHD[i] == '1') {
+                val startHour = (i * 2 + 23) % 24
+                val endHour = (i * 2 + 1) % 24
+                val canChiHour = "${CAN[getCanHourIndex(canDateIndex, i)]} ${CHI[i]}"
+                val zodiacHour = ZodiacHour(startHour, endHour, canChiHour)
+                zodiacHours.add(zodiacHour)
+            }
+        }
+
+        return zodiacHours
+    }
+
+    //Trả về danh sách các giờ hoàng đạo ở ngày, tháng, năm dương là tham số truyền vào.
+    fun getZodiacHour(solarDay: Int, solarMonth: Int, solarYear: Int): MutableList<ZodiacHour> {
+        val lunarDate = getLunarDate(solarDay, solarMonth, solarYear)
+
+        val chiOfDay = (lunarDate.jd + 1) % 12
+        val gioHD =
+            GIO_HD[chiOfDay % 6] // same values for Ty' (1) and Ngo. (6), for Suu and Mui etc.
+
+        val zodiacHours = mutableListOf<ZodiacHour>()
+
+        val canDateIndex = (lunarDate.jd + 9) % 10
+
+        for (i in 0..11) {
+            if (gioHD[i] == '1') {
+                val startHour = (i * 2 + 23) % 24
+                val endHour = (i * 2 + 1) % 24
+                val canChiHour = "${CAN[getCanHourIndex(canDateIndex, i)]} ${CHI[i]}"
+                val zodiacHour = ZodiacHour(startHour, endHour, canChiHour)
+                zodiacHours.add(zodiacHour)
+            }
+        }
+
+        return zodiacHours
+    }
+
+//========== Support Functions ==========//
 
     private fun findLunarDate(jd: Int, ly: MutableList<LunarDate>): LunarDate {
         if (jd > LAST_DAY || jd < FIRST_DAY || ly[0].jd > jd) {

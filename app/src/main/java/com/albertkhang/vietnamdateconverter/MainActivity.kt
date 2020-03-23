@@ -32,9 +32,44 @@ class MainActivity : AppCompatActivity() {
 //            testGetCanChiDate()
 //            testGetWeekdays()
 //            testGetCanChiHour()
-            testGetSolarTerm()
+//            testGetSolarTerm()
+            testZodiacHour()
         }
         btnConvert.callOnClick()
+    }
+
+    private fun testZodiacHour() {
+        val GET_ZODIACHOUR_LOG = "testZodiacHourLog"
+
+        val solarDate = SolarDate()
+        Log.d(GET_ZODIACHOUR_LOG, solarDate.toString())
+
+        val lunarDate = vietnamDateConverter.getLunarDate(solarDate)
+        Log.d(GET_ZODIACHOUR_LOG, lunarDate.toString())
+
+        val zh1 = vietnamDateConverter.getZodiacHour()
+        Log.d(GET_ZODIACHOUR_LOG, "zh1: ")
+        zh1.forEach {
+            Log.d(GET_ZODIACHOUR_LOG, it.toString())
+        }
+
+        val zh2 = vietnamDateConverter.getZodiacHour(solarDate)
+        Log.d(GET_ZODIACHOUR_LOG, "zh2: ")
+        zh2.forEach {
+            Log.d(GET_ZODIACHOUR_LOG, it.toString())
+        }
+
+        val zh3 = vietnamDateConverter.getZodiacHour(lunarDate)
+        Log.d(GET_ZODIACHOUR_LOG, "zh3: ")
+        zh3.forEach {
+            Log.d(GET_ZODIACHOUR_LOG, it.toString())
+        }
+
+        val zh4 = vietnamDateConverter.getZodiacHour(23, 3, 2020)
+        Log.d(GET_ZODIACHOUR_LOG, "zh4: ")
+        zh4.forEach {
+            Log.d(GET_ZODIACHOUR_LOG, it.toString())
+        }
     }
 
     private fun testGetSolarTerm() {

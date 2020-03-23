@@ -27,4 +27,8 @@ class ZodiacHour {
         _endHour = endHour
         _canChiHour = canChiHour
     }
+
+    override fun toString(): String {
+        return "ZodiacHour[startHour: $_startHour, endHour: $_endHour, canChiHour: $_canChiHour]"
+    }
 }
