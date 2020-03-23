@@ -62,9 +62,16 @@ class LunarDate {
         }
 
     constructor(day: Int, month: Int, year: Int) {
-        this.day = day
-        this.month = month
-        this.year = year
+        _day = day
+        _month = month
+        _year = year
+    }
+
+    internal constructor(day: Int, month: Int, year: Int, leap: Int, jd: Int) {
+        _day = day
+        _month = month
+        _year = year
+
     }
 
     override fun toString(): String {

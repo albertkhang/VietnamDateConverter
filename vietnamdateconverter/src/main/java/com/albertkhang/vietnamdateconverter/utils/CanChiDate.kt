@@ -23,9 +23,9 @@ class CanChiDate {
         private set
 
     internal constructor(day: String, month: String, year: String) {
-        this._canChiDay = day
-        this.canChiMonth = month
-        this.canChiYear = year
+        _canChiDay = day
+        _canChiMonth = month
+        _canChiYear = year
     }
 
     override fun toString(): String {

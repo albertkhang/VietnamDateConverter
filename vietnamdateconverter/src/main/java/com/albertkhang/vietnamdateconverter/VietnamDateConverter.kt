@@ -1,6 +1,10 @@
 package com.albertkhang.vietnamdateconverter
 
+import com.albertkhang.vietnamdateconverter.utils.CanChiDate
+import com.albertkhang.vietnamdateconverter.utils.LunarDate
+import com.albertkhang.vietnamdateconverter.utils.SolarDate
 import kotlin.math.floor
+import kotlin.math.sin
 
 class VietnamDateConverter {
     var TK19 = arrayOf(
@@ -471,5 +475,285 @@ class VietnamDateConverter {
         return _instance
     }
 
+    val FIRST_DAY = jdn(25, 1, 1800)// Tết âm lịch 1800
+    val LAST_DAY = jdn(31, 12, 2199)
 
+    //========== Ngày âm
+    private fun getLunarDate(dd: Int, mm: Int, yyyy: Int): LunarDate {
+        if (yyyy < 1800 || 2199 < yyyy) {
+            return LunarDate(0, 0, 0)
+        }
+        var ly = getYearInfo(yyyy)
+        val jd = jdn(dd, mm, yyyy)
+        if (jd < ly[0].jd) {
+            ly = getYearInfo(yyyy - 1)
+        }
+        return findLunarDate(jd, ly)
+    }
+
+    //========== Ngày dương
+    private fun getSolarDate(dd: Int, mm: Int, yyyy: Int): SolarDate {
+        if (yyyy < 1800 || 2199 < yyyy) {
+            return SolarDate(0, 0, 0, 0)
+        }
+
+        val lunarDates = getYearInfo(yyyy)
+        val lunarDate = lunarDates[mm - 1]
+
+//        Log.d(
+//            "MainActivity",
+//            "t.month !== r && (t = a[r]) == ${lunarDate.mm != mm && (lunarDate == lunarDates[mm])}"
+//        )
+
+        return jdToSolarDate(lunarDate.jd + dd - 1)
+    }
+
+    //========== Ngày can chi
+    private fun getCanChiDate(lunarDate: LunarDate): CanChiDate {
+        val dayName = CAN[(lunarDate.jd + 9) % 10] + " " + CHI[(lunarDate.jd + 1) % 12]
+        var monthName =
+            CAN[(lunarDate.year * 12 + lunarDate.month + 3) % 10] + " " + CHI[(lunarDate.month + 1) % 12]
+        if (lunarDate.leap == 1) {
+            monthName += " (Nhuận)"
+        }
+
+        val yearName = CAN[(lunarDate.year + 6) % 10] + " " + CHI[(lunarDate.year + 8) % 12]
+
+        return CanChiDate(dayName, monthName, yearName)
+    }
+
+    //========== Thứ
+//    val dayOfWeek = TUAN[(lunarDate.jd + 1) % 7]
+
+    //==========Giờ can chi
+//    val canDateIndex = (lunarDate.jd + 9) % 10
+//    val chiHourIndex = getChiHourIndex(
+//        Calendar.getInstance().get(Calendar.HOUR_OF_DAY),
+//        Calendar.getInstance().get(Calendar.MINUTE)
+//    )
+//
+//    val gioCanChi =
+//        "Giờ CanChi: ${CAN[getCanHourIndex(
+//            canDateIndex,
+//            chiHourIndex
+//        )]} ${CHI[chiHourIndex]}"
+
+    fun getChiHourIndex(hour: Int, minute: Int): Int {
+        val time: Float = hour + minute / 60f
+
+        if (time >= 23 || time < 1) {   //Tý
+            return 0
+        }
+        if (time >= 1 && time < 3) {    //Sửu
+            return 1
+        }
+        if (time >= 3 && time < 5) {    //Dần
+            return 2
+        }
+        if (time >= 5 && time < 7) {    //Mão
+            return 3
+        }
+        if (time >= 7 && time < 9) {    //Thìn
+            return 4
+        }
+        if (time >= 9 && time < 11) {   //Tỵ
+            return 5
+        }
+        if (time >= 11 && time < 13) {  //Ngọ
+            return 6
+        }
+        if (time >= 13 && time < 15) {  //Mùi
+            return 7
+        }
+        if (time >= 15 && time < 17) {  //Thân
+            return 8
+        }
+        if (time >= 17 && time < 19) {  //Dậu
+            return 9
+        }
+        if (time >= 19 && time < 21) {  //Tuất
+            return 10
+        } else {                          //Hợi
+            return 11
+        }
+    }
+
+    fun getCanHourIndex(chiDate: Int, chiHourIndex: Int): Int {
+        var baseIndex = 0
+
+        when (chiDate) {
+            0, 5 -> {   //Giáp - Kỷ
+                baseIndex = 0   //Giáp
+            }
+
+            1, 6 -> {   //Ất - Canh
+                baseIndex = 2   //Bính
+            }
+
+            2, 7 -> {   //Bính Tân
+                baseIndex = 4   //Mậu
+            }
+
+            3, 8 -> {   //Đinh Nhâm
+                baseIndex = 6   //Canh
+            }
+
+            4, 9 -> {   //Mậu Quý
+                baseIndex = 8   //Nhâm
+            }
+        }
+        val index = (baseIndex + chiHourIndex) % 10
+        return index
+    }
+
+    //========== Tiết khí
+    private fun getTietKhi(jd: Int): String {
+        return TIETKHI[getSunLongitude(jd + 1)]
+    }
+
+    //========== Giờ hoàng đạo
+    private fun getGioHoangDao(lunarDateJd: Int): String {
+        val chiOfDay = (lunarDateJd + 1) % 12
+        val gioHD =
+            GIO_HD[chiOfDay % 6] // same values for Ty' (1) and Ngo. (6), for Suu and Mui etc.
+        var ret = ""
+        val canDateIndex = (lunarDateJd + 9) % 10
+        var count = 0
+        for (i in 0..11) {
+            if (gioHD[i] == '1') {
+                ret += "${CAN[getCanHourIndex(canDateIndex, i)]} ${CHI[i]}"
+                ret += " (" + (i * 2 + 23) % 24 + " - " + (i * 2 + 1) % 24 + ")"
+                if (count++ < 5) ret += ", "
+            }
+        }
+
+        return ret
+    }
+
+    private fun findLunarDate(jd: Int, ly: MutableList<LunarDate>): LunarDate {
+        if (jd > LAST_DAY || jd < FIRST_DAY || ly[0].jd > jd) {
+            return LunarDate(0, 0, 0)
+        }
+        var i = ly.size - 1
+        while (jd < ly[i].jd) {
+            i--
+        }
+        val off = jd - ly[i].jd
+        return LunarDate(ly[i].day + off, ly[i].month, ly[i].year, ly[i].leap, jd)
+    }
+
+    private fun getYearInfo(yyyy: Int): MutableList<LunarDate> {
+        val yearCode: Int = when {
+            yyyy < 1900 -> {
+                TK19[yyyy - 1800]
+            }
+            yyyy < 2000 -> {
+                TK20[yyyy - 1900]
+            }
+            yyyy < 2100 -> {
+                TK21[yyyy - 2000]
+            }
+            else -> {
+                TK22[yyyy - 2100]
+            }
+        }
+        return decodeLunarYear(yyyy, yearCode)
+    }
+
+    private fun decodeLunarYear(yy: Int, k: Int): MutableList<LunarDate> {
+        var j: Int
+        var mm: Int
+        val ly = mutableListOf<LunarDate>()
+
+        val monthLengths = arrayOf(29, 30)
+        val regularMonths = arrayOfNulls<Int>(12)
+        val offsetOfTet = k shr 17
+        val leapMonth = k and 0xf
+        val leapMonthLength = monthLengths[k shr 16 and 0x1]
+        val solarNY = jdn(1, 1, yy) as Int
+        var currentJD = solarNY + offsetOfTet
+        j = k shr 4
+
+        var i = 0
+        while (i < 12) {
+            regularMonths[12 - i - 1] = monthLengths[j and 0x1]
+            j = j shr 1
+            i++
+        }
+
+        if (leapMonth == 0) {
+            mm = 1
+            while (mm <= 12) {
+                ly.add(LunarDate(1, mm, yy, 0, currentJD))
+                currentJD += regularMonths[mm - 1]!!
+                mm++
+            }
+        } else {
+            mm = 1
+            while (mm <= leapMonth) {
+                ly.add(LunarDate(1, mm, yy, 0, currentJD))
+                currentJD += regularMonths[mm - 1]!!
+                mm++
+            }
+
+            ly.add(LunarDate(1, leapMonth, yy, 1, currentJD))
+            currentJD += leapMonthLength
+            mm = leapMonth + 1
+
+            while (mm <= 12) {
+                ly.add(LunarDate(1, mm, yy, 0, currentJD))
+                currentJD += regularMonths[mm - 1]!!
+                mm++
+            }
+        }
+        return ly
+    }
+
+    private fun jdn(dd: Int, mm: Int, yy: Int): Int {
+        val a = INT((14 - mm) / 12)
+        val y = yy + 4800 - a
+        val m = mm + 12 * a - 3
+        val jd =
+            dd + INT((153 * m + 2) / 5) + 365 * y + INT(y / 4) - INT(y / 100) + INT(y / 400) - 32045
+        return jd.toInt()
+    }
+
+    private fun jdToSolarDate(jd: Int): SolarDate {
+        val a: Int
+        val b: Int
+        val c: Int
+
+        if (jd > 2299160) { // After 5/10/1582, Gregorian calendar
+            a = jd + 32044
+            b = INT((4 * a + 3) / 146097).toInt()
+            c = (a - INT((b * 146097) / 4)).toInt()
+        } else {
+            b = 0
+            c = jd + 32082
+        }
+        val d = INT((4 * c + 3) / 1461).toInt()
+        val e = (c - INT((1461 * d) / 4)).toInt()
+        val m = (INT((5 * e + 2) / 153)).toInt()
+        val day = (e - INT((153 * m + 2) / 5) + 1).toInt()
+        val month = (m + 3 - 12 * INT(m / 10)).toInt()
+        val year = (b * 100 + d - 4800 + INT(m / 10)).toInt()
+
+        return SolarDate(day, month, year, jd)
+    }
+
+    private fun getSunLongitude(dayNumber: Int): Int {
+        val jdn = dayNumber - 0.5 - 7 / 24
+        val t = (jdn - 2451545.0) / 36525 // Time in Julian centuries from 2000-01-01 12:00:00 GMT
+        val t2 = t * t
+        val dr = Math.PI / 180 // degree to radian
+        val m =
+            357.52910 + 35999.05030 * t - 0.0001559 * t2 - 0.00000048 * t * t2 // mean anomaly, degree
+        val l0 = 280.46645 + 36000.76983 * t + 0.0003032 * t2 // mean longitude, degree
+        var dl = (1.914600 - 0.004817 * t - 0.000014 * t2) * sin(dr * m)
+        dl += (0.019993 - 0.000101 * t) * sin(dr * 2 * m) + 0.000290 * sin(dr * 3 * m)
+        var l = l0 + dl // true longitude, degree
+        l *= dr
+        l -= Math.PI * 2 * (INT(l / (Math.PI * 2))) // Normalize to (0, 2*PI)
+        return INT(l / Math.PI * 12).toInt()
+    }
 }

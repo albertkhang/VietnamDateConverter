@@ -60,9 +60,16 @@ class SolarDate {
     }
 
     constructor(day: Int, month: Int, year: Int) {
-        this.day = day
-        this.month = month
-        this.year = year
+        _day = day
+        _month = month
+        _year = year
+    }
+
+    internal constructor(day: Int, month: Int, year: Int, jd: Int) {
+        _day = day
+        _month = month
+        _year = year
+        _jd = jd
     }
 
     override fun toString(): String {
