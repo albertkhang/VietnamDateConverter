@@ -525,6 +525,7 @@ class VietnamDateConverter {
     }
 
     //========== Ngày dương ==========//
+
     //Trả về ngày dương với ngày âm là tham số truyền vào.
     fun getSolarDate(lunarDate: LunarDate): SolarDate {
         if (lunarDate.year < 1800 || 2199 < lunarDate.year) {
@@ -549,8 +550,12 @@ class VietnamDateConverter {
         return jdToSolarDate(lunarDate.jd + lunarDay - 1)
     }
 
-    //========== Ngày can chi
-    private fun getCanChiDate(lunarDate: LunarDate): CanChiDate {
+    //========== Ngày Can Chi ==========//
+
+    //Trả về ngày Can Chi của ngày dương hiện tại.
+    fun getCanChiDate(): CanChiDate {
+        val lunarDate = getLunarDate()
+
         val dayName = CAN[(lunarDate.jd + 9) % 10] + " " + CHI[(lunarDate.jd + 1) % 12]
         var monthName =
             CAN[(lunarDate.year * 12 + lunarDate.month + 3) % 10] + " " + CHI[(lunarDate.month + 1) % 12]
@@ -561,6 +566,42 @@ class VietnamDateConverter {
         val yearName = CAN[(lunarDate.year + 6) % 10] + " " + CHI[(lunarDate.year + 8) % 12]
 
         return CanChiDate(dayName, monthName, yearName)
+    }
+
+    //Trả về ngày Can Chi của ngày âm là tham số truyền vào.
+    fun getCanChiDate(lunarDate: LunarDate): CanChiDate {
+        val dayName = CAN[(lunarDate.jd + 9) % 10] + " " + CHI[(lunarDate.jd + 1) % 12]
+        var monthName =
+            CAN[(lunarDate.year * 12 + lunarDate.month + 3) % 10] + " " + CHI[(lunarDate.month + 1) % 12]
+        if (lunarDate.leap == 1) {
+            monthName += " (Nhuận)"
+        }
+
+        val yearName = CAN[(lunarDate.year + 6) % 10] + " " + CHI[(lunarDate.year + 8) % 12]
+
+        return CanChiDate(dayName, monthName, yearName)
+    }
+
+    //Trả về ngày Can Chi của ngày duongw là tham số truyền vào.
+    fun getCanChiDate(solarDate: SolarDate): CanChiDate {
+        val lunarDate = getLunarDate(solarDate)
+
+        val dayName = CAN[(lunarDate.jd + 9) % 10] + " " + CHI[(lunarDate.jd + 1) % 12]
+        var monthName =
+            CAN[(lunarDate.year * 12 + lunarDate.month + 3) % 10] + " " + CHI[(lunarDate.month + 1) % 12]
+        if (lunarDate.leap == 1) {
+            monthName += " (Nhuận)"
+        }
+
+        val yearName = CAN[(lunarDate.year + 6) % 10] + " " + CHI[(lunarDate.year + 8) % 12]
+
+        return CanChiDate(dayName, monthName, yearName)
+    }
+
+    //Trả về ngày Can Chi của ngày, tháng, năm là tham số truyền vào.
+    fun getCanChiDate(solarDay: Int, solarMonth: Int, solarYear: Int): CanChiDate {
+        val solarDate = SolarDate(solarDay, solarMonth, solarYear)
+        return getCanChiDate(solarDate)
     }
 
     //========== Thứ

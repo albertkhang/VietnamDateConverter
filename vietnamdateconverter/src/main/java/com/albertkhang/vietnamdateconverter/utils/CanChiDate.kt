@@ -29,6 +29,6 @@ class CanChiDate {
     }
 
     override fun toString(): String {
-        return "LunarDate[day=$canChiDay, month=$canChiMonth, year=$canChiYear]"
+        return "LunarDate[day=$_canChiDay, month=$_canChiMonth, year=$_canChiYear]"
     }
 }

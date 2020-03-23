@@ -28,8 +28,31 @@ class MainActivity : AppCompatActivity() {
         btnConvert.setOnClickListener {
             testGetLunarDate()
             testGetSolarDate()
+            testGetCanChiDate()
         }
         btnConvert.callOnClick()
+    }
+
+    private fun testGetCanChiDate() {
+        val GET_CANCHI_LOG = "testGetCanChiDateLog"
+
+        val solarDate = SolarDate()
+        Log.d(GET_CANCHI_LOG, solarDate.toString())
+
+        val lunarDate = vietnamDateConverter.getLunarDate(solarDate)
+        Log.d(GET_CANCHI_LOG, lunarDate.toString())
+
+        val cd1 = vietnamDateConverter.getCanChiDate()
+        Log.d(GET_CANCHI_LOG, "cd1: $cd1")
+
+        val cd2 = vietnamDateConverter.getCanChiDate(lunarDate)
+        Log.d(GET_CANCHI_LOG, "cd2: $cd2")
+
+        val cd3 = vietnamDateConverter.getCanChiDate(solarDate)
+        Log.d(GET_CANCHI_LOG, "cd3: $cd3")
+
+        val cd4 = vietnamDateConverter.getCanChiDate(solarDate.day, solarDate.month, solarDate.year)
+        Log.d(GET_CANCHI_LOG, "cd4: $cd4")
     }
 
     private fun testGetSolarDate() {
