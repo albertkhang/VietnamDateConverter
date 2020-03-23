@@ -3,6 +3,7 @@ package com.albertkhang.vietnamdateconverter
 import com.albertkhang.vietnamdateconverter.utils.CanChiDate
 import com.albertkhang.vietnamdateconverter.utils.LunarDate
 import com.albertkhang.vietnamdateconverter.utils.SolarDate
+import java.util.*
 import kotlin.math.floor
 import kotlin.math.sin
 
@@ -478,15 +479,47 @@ class VietnamDateConverter {
     val FIRST_DAY = jdn(25, 1, 1800)// Tết âm lịch 1800
     val LAST_DAY = jdn(31, 12, 2199)
 
-    //========== Ngày âm
-    private fun getLunarDate(dd: Int, mm: Int, yyyy: Int): LunarDate {
-        if (yyyy < 1800 || 2199 < yyyy) {
+    //========== Ngày âm ==========//
+
+    //Trả về ngày âm của ngày dương hiện tại.
+    private fun getLunarDate(): LunarDate {
+        val currentDay = Calendar.getInstance().get(Calendar.DATE)
+        val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
+        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+
+        if (currentYear < 1800 || 2199 < currentYear) {
             return LunarDate(0, 0, 0)
         }
-        var ly = getYearInfo(yyyy)
-        val jd = jdn(dd, mm, yyyy)
+        var ly = getYearInfo(currentYear)
+        val jd = jdn(currentDay, currentMonth, currentYear)
         if (jd < ly[0].jd) {
-            ly = getYearInfo(yyyy - 1)
+            ly = getYearInfo(currentYear - 1)
+        }
+        return findLunarDate(jd, ly)
+    }
+
+    //Trả về ngày âm với ngày dương là tham số truyền vào.
+    private fun getLunarDate(solarDate: SolarDate): LunarDate {
+        if (solarDate.year < 1800 || 2199 < solarDate.year) {
+            return LunarDate(0, 0, 0)
+        }
+        var ly = getYearInfo(solarDate.year)
+        val jd = jdn(solarDate.day, solarDate.month, solarDate.year)
+        if (jd < ly[0].jd) {
+            ly = getYearInfo(solarDate.year - 1)
+        }
+        return findLunarDate(jd, ly)
+    }
+
+    //Trả về ngày âm với ngày, tháng, năm dương là tham số truyền vào.
+    private fun getLunarDate(solarDay: Int, solarMonth: Int, solarYear: Int): LunarDate {
+        if (solarYear < 1800 || 2199 < solarYear) {
+            return LunarDate(0, 0, 0)
+        }
+        var ly = getYearInfo(solarYear)
+        val jd = jdn(solarDay, solarMonth, solarYear)
+        if (jd < ly[0].jd) {
+            ly = getYearInfo(solarYear - 1)
         }
         return findLunarDate(jd, ly)
     }
