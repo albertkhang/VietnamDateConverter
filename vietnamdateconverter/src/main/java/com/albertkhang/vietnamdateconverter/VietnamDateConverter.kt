@@ -1,5 +1,6 @@
 package com.albertkhang.vietnamdateconverter
 
+import android.util.Log
 import com.albertkhang.vietnamdateconverter.utils.CanChiDate
 import com.albertkhang.vietnamdateconverter.utils.LunarDate
 import com.albertkhang.vietnamdateconverter.utils.SolarDate
@@ -463,11 +464,13 @@ class VietnamDateConverter {
         return floor(n.toDouble())
     }
 
-    private var _instance: VietnamDateConverter? = null
+    companion object {
+        private var _instance: VietnamDateConverter? = null
+    }
 
     fun getInstance(): VietnamDateConverter {
         if (_instance == null) {
-            synchronized(VietnamDateConverter::class) {
+            synchronized(this) {
                 if (_instance == null) {
                     _instance = VietnamDateConverter()
                 }
