@@ -26,11 +26,34 @@ class MainActivity : AppCompatActivity() {
 
     private fun addEvent() {
         btnConvert.setOnClickListener {
-            testGetLunarDate()
-            testGetSolarDate()
-            testGetCanChiDate()
+//            testGetLunarDate()
+//            testGetSolarDate()
+//            testGetCanChiDate()
+            testGetWeekdays()
         }
         btnConvert.callOnClick()
+    }
+
+    private fun testGetWeekdays() {
+        val GET_WEEKDAYS_LOG = "testGetWeekdaysLog"
+
+        val solarDate = SolarDate()
+        Log.d(GET_WEEKDAYS_LOG, solarDate.toString())
+
+        val lunarDate = vietnamDateConverter.getLunarDate(solarDate)
+        Log.d(GET_WEEKDAYS_LOG, lunarDate.toString())
+
+        val wd1 = vietnamDateConverter.getWeekdays()
+        Log.d(GET_WEEKDAYS_LOG, "wd1: $wd1")
+
+        val wd2 = vietnamDateConverter.getWeekdays(solarDate)
+        Log.d(GET_WEEKDAYS_LOG, "wd2: $wd2")
+
+        val wd3 = vietnamDateConverter.getWeekdays(lunarDate)
+        Log.d(GET_WEEKDAYS_LOG, "wd3: $wd3")
+
+        val wd4 = vietnamDateConverter.getWeekdays(23, 3, 2020)
+        Log.d(GET_WEEKDAYS_LOG, "wd4: $wd4")
     }
 
     private fun testGetCanChiDate() {

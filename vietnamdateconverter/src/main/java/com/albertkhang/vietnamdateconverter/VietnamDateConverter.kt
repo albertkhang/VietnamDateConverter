@@ -604,8 +604,31 @@ class VietnamDateConverter {
         return getCanChiDate(solarDate)
     }
 
-    //========== Thứ
-//    val dayOfWeek = TUAN[(lunarDate.jd + 1) % 7]
+    //========== Thứ ==========//
+
+    //Trả về thứ của ngày hiện tại.
+    fun getWeekdays(): String {
+        val lunarDate = getLunarDate()
+        return TUAN[(lunarDate.jd + 1) % 7]
+    }
+
+    //Trả về thứ của ngày dương là tham số truyền vào.
+    fun getWeekdays(solarDate: SolarDate): String {
+        val lunarDate = getLunarDate(solarDate)
+
+        return TUAN[(lunarDate.jd + 1) % 7]
+    }
+
+    //Trả về thứ của ngày âm là tham số truyền vào.
+    fun getWeekdays(lunarDate: LunarDate): String {
+        return TUAN[(lunarDate.jd + 1) % 7]
+    }
+
+    //Trả về thứ của ngày, tháng, năm là tham số truyền vào.
+    fun getWeekdays(solarDay: Int, solarMonth: Int, solarYear: Int): String {
+        val lunarDate = getLunarDate(solarDay, solarMonth, solarYear)
+        return TUAN[(lunarDate.jd + 1) % 7]
+    }
 
     //==========Giờ can chi
 //    val canDateIndex = (lunarDate.jd + 9) % 10
