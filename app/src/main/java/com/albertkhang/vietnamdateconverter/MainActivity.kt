@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
 //            testGetWeekdays()
 //            testGetCanChiHour()
 //            testGetSolarTerm()
-            testZodiacHour()
+//            testZodiacHour()
         }
         btnConvert.callOnClick()
     }

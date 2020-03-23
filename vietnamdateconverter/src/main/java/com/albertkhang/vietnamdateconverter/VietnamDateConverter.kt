@@ -775,7 +775,6 @@ class VietnamDateConverter {
 
 //========== Tiết khí ==========//
 
-    //TODO: Optimize using jd in SolarDate
     //Trả về tiết khí của ngày hiện tại.
     fun getSolarTerm(): String {
         val lunarDate = getLunarDate()
