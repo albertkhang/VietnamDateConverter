@@ -630,18 +630,74 @@ class VietnamDateConverter {
         return TUAN[(lunarDate.jd + 1) % 7]
     }
 
-    //==========Giờ can chi
-//    val canDateIndex = (lunarDate.jd + 9) % 10
-//    val chiHourIndex = getChiHourIndex(
-//        Calendar.getInstance().get(Calendar.HOUR_OF_DAY),
-//        Calendar.getInstance().get(Calendar.MINUTE)
-//    )
-//
-//    val gioCanChi =
-//        "Giờ CanChi: ${CAN[getCanHourIndex(
-//            canDateIndex,
-//            chiHourIndex
-//        )]} ${CHI[chiHourIndex]}"
+    //========== Giờ can chi ==========//
+
+    fun getCanChiHour(): String {
+        val lunarDate = getLunarDate()
+
+        val canDateIndex = (lunarDate.jd + 9) % 10
+        val chiHourIndex = getChiHourIndex(
+            Calendar.getInstance().get(Calendar.HOUR_OF_DAY),
+            Calendar.getInstance().get(Calendar.MINUTE)
+        )
+
+        return "${CAN[getCanHourIndex(
+            canDateIndex,
+            chiHourIndex
+        )]} ${CHI[chiHourIndex]}"
+    }
+
+    fun getCanChiHour(hour: Int, minute: Int): String {
+        val lunarDate = getLunarDate()
+
+        val canDateIndex = (lunarDate.jd + 9) % 10
+        val chiHourIndex = getChiHourIndex(hour, minute)
+
+        return "${CAN[getCanHourIndex(
+            canDateIndex,
+            chiHourIndex
+        )]} ${CHI[chiHourIndex]}"
+    }
+
+    fun getCanChiHour(hour: Int, minute: Int, solarDate: SolarDate): String {
+        val lunarDate = getLunarDate(solarDate)
+
+        val canDateIndex = (lunarDate.jd + 9) % 10
+        val chiHourIndex = getChiHourIndex(hour, minute)
+
+        return "${CAN[getCanHourIndex(
+            canDateIndex,
+            chiHourIndex
+        )]} ${CHI[chiHourIndex]}"
+    }
+
+    fun getCanChiHour(hour: Int, minute: Int, lunarDate: LunarDate): String {
+        val canDateIndex = (lunarDate.jd + 9) % 10
+        val chiHourIndex = getChiHourIndex(hour, minute)
+
+        return "${CAN[getCanHourIndex(
+            canDateIndex,
+            chiHourIndex
+        )]} ${CHI[chiHourIndex]}"
+    }
+
+    fun getCanChiHour(
+        hour: Int,
+        minute: Int,
+        solarDay: Int,
+        solarMonth: Int,
+        solarYear: Int
+    ): String {
+        val lunarDate = getLunarDate(solarDay, solarMonth, solarYear)
+
+        val canDateIndex = (lunarDate.jd + 9) % 10
+        val chiHourIndex = getChiHourIndex(hour, minute)
+
+        return "${CAN[getCanHourIndex(
+            canDateIndex,
+            chiHourIndex
+        )]} ${CHI[chiHourIndex]}"
+    }
 
     private fun getChiHourIndex(hour: Int, minute: Int): Int {
         val time: Float = hour + minute / 60f

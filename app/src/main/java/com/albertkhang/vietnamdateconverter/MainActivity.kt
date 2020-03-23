@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.Button
 import com.albertkhang.vietnamdateconverter.utils.LunarDate
 import com.albertkhang.vietnamdateconverter.utils.SolarDate
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var btnConvert: Button
@@ -29,9 +30,42 @@ class MainActivity : AppCompatActivity() {
 //            testGetLunarDate()
 //            testGetSolarDate()
 //            testGetCanChiDate()
-            testGetWeekdays()
+//            testGetWeekdays()
+            testGetCanChiHour()
         }
         btnConvert.callOnClick()
+    }
+
+    private fun testGetCanChiHour() {
+        val GET_CANCHIHOUR_LOG = "testGetCanChiHourLog"
+
+        val solarDate = SolarDate()
+        Log.d(GET_CANCHIHOUR_LOG, solarDate.toString())
+
+        val lunarDate = vietnamDateConverter.getLunarDate(solarDate)
+        Log.d(GET_CANCHIHOUR_LOG, lunarDate.toString())
+
+        val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+        //TODO: using HOUR_OF_DAY not HOUR
+        Log.d(GET_CANCHIHOUR_LOG, hour.toString())
+
+        val minute = Calendar.getInstance().get(Calendar.MINUTE)
+        Log.d(GET_CANCHIHOUR_LOG, minute.toString())
+
+        val cch1 = vietnamDateConverter.getCanChiHour()
+        Log.d(GET_CANCHIHOUR_LOG, "cch1: $cch1")
+
+        val cch2 = vietnamDateConverter.getCanChiHour(hour, minute)
+        Log.d(GET_CANCHIHOUR_LOG, "cch2: $cch2")
+
+        val cch3 = vietnamDateConverter.getCanChiHour(hour, minute, solarDate)
+        Log.d(GET_CANCHIHOUR_LOG, "cch3: $cch3")
+
+        val cch4 = vietnamDateConverter.getCanChiHour(hour, minute, lunarDate)
+        Log.d(GET_CANCHIHOUR_LOG, "cch4: $cch4")
+
+        val cch5 = vietnamDateConverter.getCanChiHour(hour, minute, 23, 3, 2020)
+        Log.d(GET_CANCHIHOUR_LOG, "cch5: $cch5")
     }
 
     private fun testGetWeekdays() {
