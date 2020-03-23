@@ -81,6 +81,6 @@ class SolarDate {
     }
 
     override fun toString(): String {
-        return "LunarDate[day=$day, month=$month, year=$year]"
+        return "SolarDate[day=$day, month=$month, year=$year]"
     }
 }

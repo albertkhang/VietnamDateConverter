@@ -525,20 +525,28 @@ class VietnamDateConverter {
     }
 
     //========== Ngày dương ==========//
-    private fun getSolarDate(dd: Int, mm: Int, yyyy: Int): SolarDate {
-        if (yyyy < 1800 || 2199 < yyyy) {
+    //Trả về ngày dương với ngày âm là tham số truyền vào.
+    fun getSolarDate(lunarDate: LunarDate): SolarDate {
+        if (lunarDate.year < 1800 || 2199 < lunarDate.year) {
             return SolarDate(0, 0, 0, 0)
         }
 
-        val lunarDates = getYearInfo(yyyy)
-        val lunarDate = lunarDates[mm - 1]
+        val lunarDates = getYearInfo(lunarDate.year)
+        val ld = lunarDates[lunarDate.month - 1]
 
-//        Log.d(
-//            "MainActivity",
-//            "t.month !== r && (t = a[r]) == ${lunarDate.mm != mm && (lunarDate == lunarDates[mm])}"
-//        )
+        return jdToSolarDate(ld.jd + lunarDate.day - 1)
+    }
 
-        return jdToSolarDate(lunarDate.jd + dd - 1)
+    //Trả về ngày dương với ngày, tháng, năm âm là tham số truyền vào.
+    fun getSolarDate(lunarDay: Int, lunarMonth: Int, lunarYear: Int): SolarDate {
+        if (lunarYear < 1800 || 2199 < lunarYear) {
+            return SolarDate(0, 0, 0, 0)
+        }
+
+        val lunarDates = getYearInfo(lunarYear)
+        val lunarDate = lunarDates[lunarMonth - 1]
+
+        return jdToSolarDate(lunarDate.jd + lunarDay - 1)
     }
 
     //========== Ngày can chi

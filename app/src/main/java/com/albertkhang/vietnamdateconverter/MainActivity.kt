@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import com.albertkhang.vietnamdateconverter.utils.LunarDate
 import com.albertkhang.vietnamdateconverter.utils.SolarDate
 
 class MainActivity : AppCompatActivity() {
@@ -26,7 +27,22 @@ class MainActivity : AppCompatActivity() {
     private fun addEvent() {
         btnConvert.setOnClickListener {
             testGetLunarDate()
+            testGetSolarDate()
         }
+        btnConvert.callOnClick()
+    }
+
+    private fun testGetSolarDate() {
+        val GET_SOLAR_LOG = "testGetSolarDateLog"
+
+        val lunarDate = LunarDate(30, 2, 2020)
+        Log.d(GET_SOLAR_LOG, lunarDate.toString())
+
+        val sd1 = vietnamDateConverter.getSolarDate(lunarDate)
+        Log.d(GET_SOLAR_LOG, sd1.toString())
+
+        val sd2 = vietnamDateConverter.getSolarDate(30, 2, 2020)
+        Log.d(GET_SOLAR_LOG, sd2.toString())
     }
 
     private fun testGetLunarDate() {
