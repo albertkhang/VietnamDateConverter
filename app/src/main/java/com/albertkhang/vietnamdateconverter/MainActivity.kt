@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun addControl() {
         btnConvert = findViewById(R.id.btnConvert)
-        vietnamDateConverter = VietnamDateConverter().getInstance()
+        vietnamDateConverter = VietnamDateConverter.getInstance()
     }
 
     private fun addEvent() {

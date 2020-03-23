@@ -1,6 +1,5 @@
 package com.albertkhang.vietnamdateconverter
 
-import android.util.Log
 import com.albertkhang.vietnamdateconverter.utils.CanChiDate
 import com.albertkhang.vietnamdateconverter.utils.LunarDate
 import com.albertkhang.vietnamdateconverter.utils.SolarDate
@@ -466,18 +465,18 @@ class VietnamDateConverter {
 
     companion object {
         private var _instance: VietnamDateConverter? = null
-    }
 
-    fun getInstance(): VietnamDateConverter {
-        if (_instance == null) {
-            synchronized(this) {
-                if (_instance == null) {
-                    _instance = VietnamDateConverter()
+        fun getInstance(): VietnamDateConverter {
+            if (_instance == null) {
+                synchronized(this) {
+                    if (_instance == null) {
+                        _instance = VietnamDateConverter()
+                    }
                 }
             }
-        }
 
-        return _instance!!
+            return _instance!!
+        }
     }
 
     private val FIRST_DAY = jdn(25, 1, 1800)// Tết âm lịch 1800
