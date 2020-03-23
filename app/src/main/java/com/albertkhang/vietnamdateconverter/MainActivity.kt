@@ -62,10 +62,10 @@ class MainActivity : AppCompatActivity() {
         Log.d(GET_SOLAR_LOG, lunarDate.toString())
 
         val sd1 = vietnamDateConverter.getSolarDate(lunarDate)
-        Log.d(GET_SOLAR_LOG, sd1.toString())
+        Log.d(GET_SOLAR_LOG, "sd1: $sd1")
 
         val sd2 = vietnamDateConverter.getSolarDate(30, 2, 2020)
-        Log.d(GET_SOLAR_LOG, sd2.toString())
+        Log.d(GET_SOLAR_LOG, "sd2: $sd2")
     }
 
     private fun testGetLunarDate() {
@@ -75,12 +75,12 @@ class MainActivity : AppCompatActivity() {
         Log.d(GET_LUNAR_LOG, solarDate.toString())
 
         val ld1 = vietnamDateConverter.getLunarDate()
-        Log.d(GET_LUNAR_LOG, "getLunarDate(): $ld1")
+        Log.d(GET_LUNAR_LOG, "ld1: $ld1")
 
         val ld2 = vietnamDateConverter.getLunarDate(solarDate)
-        Log.d(GET_LUNAR_LOG, "getLunarDate(solarDate): $ld2")
+        Log.d(GET_LUNAR_LOG, "ld2: $ld2")
 
         val ld3 = vietnamDateConverter.getLunarDate(23, 3, 2020)
-        Log.d(GET_LUNAR_LOG, "getLunarDate(day, month, year): $ld3")
+        Log.d(GET_LUNAR_LOG, "ld3: $ld3")
     }
 }
