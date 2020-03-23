@@ -524,7 +524,7 @@ class VietnamDateConverter {
         return findLunarDate(jd, ly)
     }
 
-    //========== Ngày dương
+    //========== Ngày dương ==========//
     private fun getSolarDate(dd: Int, mm: Int, yyyy: Int): SolarDate {
         if (yyyy < 1800 || 2199 < yyyy) {
             return SolarDate(0, 0, 0, 0)
