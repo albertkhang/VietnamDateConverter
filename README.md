@@ -7,7 +7,7 @@
 
 - Get **Can-Chi Date** from **Solar/Lunar Date** / Tính Ngày Theo Can Chi
 ```
-Example: NgàyTân Hợi, Tháng Bính Dần, Năm Kỷ Mão
+Example: Ngày Tân Hợi, Tháng Bính Dần, Năm Kỷ Mão
 ```
 - Get **Weekdays** / Tính Thứ Trong Tuần
 ```
@@ -19,7 +19,7 @@ Example: Giờ Bính Tuất
 ```
 - Get **Solar Term** / Tính Tiết Khí
 ```
-Example: Xuân Phân
+Example: Tiết Xuân Phân
 ```
 - Get **Zodiac Hour** / Tính Giờ Hoàng Đạo
 ```
@@ -74,6 +74,7 @@ Instead of using as above, using like this way
 val vdConverter = VietnamDateConverter.getInstance().getLunarDate()
 ```
 ## Documentation
+Read full documentation [here](https://github.com/albertkhang/VietnamDateConverter/blob/develop/document/DOCUMENT.md)
 
 ## Contribute
 This library can only get better if you make code contributions. Found a bug? Report it. Have a feature idea you'd love to see in VietnamDateConverter? Contribute to the project! All pull requests are welcome.
