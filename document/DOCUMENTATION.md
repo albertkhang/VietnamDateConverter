@@ -1,4 +1,4 @@
-# VietnamDateConverter Document
+# VietnamDateConverter Documentation
 There are two parts to this document. The first is "**Object Classes**" which only have a unique function to hold data. The second is a "**Converter**" to convert between those object classes.
 ## Object Classes
 We have 4 object to hold data and public functions are:
