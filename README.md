@@ -1,11 +1,11 @@
 # VietnamDateConverter
 
 ## Features
-- Get **Lunar Date** from **Solar Date** / Tính Ngày Âm Lịch
+- Get **Lunar Date** from **Solar Date** / Tính Ngày Âm Lịch Từ Ngày Dương Lịch
 
-- Get **Solar Date** from **Lunar Date** / Tính Ngày Dương Lịch
+- Get **Solar Date** from **Lunar Date** / Tính Ngày Dương Lịch Từ Ngày Âm Lịch
 
-- Get **Can-Chi Date** from **Solar/Lunar Date** / Tính Ngày Theo Can Chi
+- Get **Can-Chi Date** from **Solar/Lunar Date** / Tính Ngày Theo Can Chi Từ Ngày Dương/Âm Lịch
 ```
 Example: Ngày Tân Hợi, Tháng Bính Dần, Năm Kỷ Mão
 ```
@@ -13,7 +13,7 @@ Example: Ngày Tân Hợi, Tháng Bính Dần, Năm Kỷ Mão
 ```
 Example: Chủ Nhật
 ```
-- Get **Can-Chi Hour** (24-hour) / Tính Giờ Theo Can Chi
+- Get **Can-Chi Hour** (24-hour) / Tính Giờ Theo Can Chi (Định Dạng 24 giờ)
 ```
 Example: Giờ Bính Tuất
 ```
