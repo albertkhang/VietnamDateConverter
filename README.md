@@ -1,13 +1,30 @@
 # VietnamDateConverter
 
 ## Features
-- Get **Lunar Date** from **Solar Date**
-- Get **Solar Date** from **Lunar Date**
-- Get **Can-Chi Date** from **Solar/Lunar Date**
-- Get **Weekdays**
-- Get **Can-Chi Hour** (24-hour)
-- Get **Solar Term**
-- Get **Zodiac Hour**
+- Get **Lunar Date** from **Solar Date** / Tính Ngày Âm Lịch
+
+- Get **Solar Date** from **Lunar Date** / Tính Ngày Dương Lịch
+
+- Get **Can-Chi Date** from **Solar/Lunar Date** / Tính Ngày Theo Can Chi
+```
+Example: NgàyTân Hợi, Tháng Bính Dần, Năm Kỷ Mão
+```
+- Get **Weekdays** / Tính Thứ Trong Tuần
+```
+Example: Chủ Nhật
+```
+- Get **Can-Chi Hour** (24-hour) / Tính Giờ Theo Can Chi
+```
+Example: Giờ Bính Tuất
+```
+- Get **Solar Term** / Tính Tiết Khí
+```
+Example: Xuân Phân
+```
+- Get **Zodiac Hour** / Tính Giờ Hoàng Đạo
+```
+Example: Bính Tý (23h-1h), Đinh Sửu (1h-3h), Kỷ Mão (5h-7h), Nhâm Ngọ (11h-13h), Giáp Thân (15h-17h), Ất Dậu (17h-19h)
+```
 
 ## Limitation
 - VietnamDateConvert can only convert dates between 1800 and 2199. It will return date is 0 if the date is not between 1800 and 2199.
@@ -39,7 +56,6 @@ There are 2 ways to initiate the instance of the library.
 ### 1. Create one time when initial
 ```
 private lateinit var vdConverter: VietnamDateConverter
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
